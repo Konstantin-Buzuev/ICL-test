@@ -6,25 +6,23 @@ import styles from './HomePage.module.scss'
 import connect from 'react-redux/es/connect/connect'
 
 import AppealsList from '../../components/AppealsList/AppealsList'
+import AppealsForm from '../../components/AppealsForm/AppealsForm'
 class HomePage extends React.Component {
   static propTypes = {
-    selectedAppeal: PropTypes.string,
+    formShown: PropTypes.bool.isRequired,
   }
   render() {
     return (
       <div className={classNames(styles.container)}>
         <AppealsList />
-        {/* TODO: remove after AppealsForm created */}
-        {this.props.selectedAppeal && (
-          <div className={classNames(styles.form)}>Form be there!</div>
-        )}
+        {this.props.formShown && <AppealsForm />}
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ appealsReducer }) => ({
-  selectedAppeal: appealsReducer.selectedAppeal,
+const mapStateToProps = ({ uiReducer }) => ({
+  formShown: uiReducer.formShown,
 })
 
 export default connect(mapStateToProps)(HomePage)
