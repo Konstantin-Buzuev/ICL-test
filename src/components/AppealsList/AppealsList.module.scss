@@ -20,13 +20,17 @@
   height: 80px;
 
   background-color: $color-white;
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 0.7s ease-in-out;
   &:hover {
     cursor: pointer;
   }
 
   &_selected {
+    transition: background-color 0.7s ease-in-out;
     background-color: $color-gray-light;
+  }
+  &_removing {
+    animation: funnyAnimation 0.7s ease;
   }
 
   &__icon {
@@ -56,5 +60,21 @@
   &__id {
     color: $color-gray-dark;
     font-size: 0.875rem;
+  }
+}
+
+@keyframes funnyAnimation {
+  25% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: matrix(0.8, 0, 0.25, 0.8, 0, 0);
+  }
+  99% {
+    height: 80px;
+  }
+  100% {
+    transform: translateX(-1000px);
+    height: 0px;
   }
 }

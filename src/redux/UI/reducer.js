@@ -1,9 +1,17 @@
-import { FORM_SHOW, FORM_HIDE, LIST_CENTER, LIST_SLIDE } from '../types'
+import {
+  FORM_SHOW,
+  FORM_HIDE,
+  LIST_CENTER,
+  LIST_SLIDE,
+  REMOVE_ITEM,
+  ITEM_REMOVED,
+} from '../types'
 
 const initialState = {
   listSlided: false,
   formShown: false,
-  itemToKill: null,
+  itemToRemove: null,
+  animationDuration: 700,
 }
 
 export default function uiReducer(state = initialState, action) {
@@ -22,7 +30,13 @@ export default function uiReducer(state = initialState, action) {
         listSlided: action.payload,
       }
     }
-
+    case ITEM_REMOVED:
+    case REMOVE_ITEM: {
+      return {
+        ...state,
+        itemToRemove: action.payload,
+      }
+    }
     default:
       return state
   }
