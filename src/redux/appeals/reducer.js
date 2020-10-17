@@ -1,4 +1,4 @@
-import { GET_APPEALS, SUBMIT_APPEAL } from '../types'
+import { GET_APPEALS, SELECT_APPEAL, SUBMIT_APPEAL } from '../types'
 
 const initialState = {
   appeals: [],
@@ -11,6 +11,12 @@ export default function appealsReducer(state = initialState, action) {
       return {
         ...state,
         appeals: action.payload,
+      }
+    }
+    case SELECT_APPEAL: {
+      return {
+        ...state,
+        selectedAppeal: action.payload,
       }
     }
     case SUBMIT_APPEAL: {
