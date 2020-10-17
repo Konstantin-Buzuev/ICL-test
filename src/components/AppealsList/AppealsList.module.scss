@@ -5,10 +5,10 @@
   flex-direction: column;
   transition: left 0.7s ease-in-out;
   position: relative;
-  max-width: 500px;
-  overflow-y: scroll;
+  max-width: 400px;
+  overflow-y: auto;
   width: 100%;
-  left: calc(50% - 150px);
+  left: calc(50% - 200px);
   &_slide {
     left: 0;
   }
