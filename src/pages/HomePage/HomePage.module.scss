@@ -1,0 +1,19 @@
+@import '../../styles/colors';
+
+.container {
+  background-color: $color-white;
+  margin: 0 auto;
+  padding: 10px;
+  max-width: 1440px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  height: 100vh;
+  overflow: hidden;
+}
+//TODO: remove after AppealsForm created
+.form {
+  width: 400px;
+  height: 500px;
+  background-color: red;
+}
