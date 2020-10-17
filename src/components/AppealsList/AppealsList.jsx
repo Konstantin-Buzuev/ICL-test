@@ -8,7 +8,7 @@ import connect from 'react-redux/es/connect/connect'
 
 import { fetchAppeals } from '../../redux/appeals/operations'
 import { selectAppeal } from '../../redux/appeals/actions'
-import { showForm, slideList } from '../../redux/UI/actions'
+import { showForm, slideList, itemRemoved } from '../../redux/UI/actions'
 
 import briefcase from '../../assets/icons/briefcase.svg'
 
@@ -18,24 +18,31 @@ class AppealsList extends React.Component {
     selectAppeal: PropTypes.func.isRequired,
     showForm: PropTypes.func.isRequired,
     slideList: PropTypes.func.isRequired,
+    itemRemoved: PropTypes.func.isRequired,
     appeals: PropTypes.array.isRequired,
     selectedAppeal: PropTypes.string,
     listSlided: PropTypes.bool.isRequired,
+    itemToRemove: PropTypes.string,
+    animationDuration: PropTypes.number.isRequired,
   }
   onSelect(id) {
     this.props.selectAppeal(id)
     this.props.slideList()
-    setTimeout(this.props.showForm, 700) // list transition duration
+    setTimeout(this.props.showForm, this.props.animationDuration)
   }
 
   mapAppealsToRender = () =>
     this.props.appeals.map((appeal) => {
       let isSelected = appeal.id === this.props.selectedAppeal
+      let toRemove = appeal.id === this.props.itemToRemove
+      if (toRemove)
+        setTimeout(this.props.itemRemoved, this.props.animationDuration)
       return (
         <div
           className={classNames(
             styles.card,
-            isSelected && styles.card_selected
+            isSelected && styles.card_selected,
+            toRemove && styles.card_removing
           )}
           key={appeal.id}
           onClick={() => this.onSelect(appeal.id)}
@@ -76,10 +83,12 @@ const mapStateToProps = ({ appealsReducer, uiReducer }) => ({
   appeals: appealsReducer.appeals,
   selectedAppeal: appealsReducer.selectedAppeal,
   listSlided: uiReducer.listSlided,
+  itemToRemove: uiReducer.itemToRemove,
+  animationDuration: uiReducer.animationDuration,
 })
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
-    { fetchAppeals, selectAppeal, showForm, slideList },
+    { fetchAppeals, selectAppeal, showForm, slideList, itemRemoved },
     dispatch
   )
 
