@@ -6,7 +6,7 @@ import styles from './AppealsForm.module.scss'
 import { bindActionCreators } from 'redux'
 import connect from 'react-redux/es/connect/connect'
 import { submitAppeal } from '../../redux/appeals/actions'
-import { centerList, hideForm } from '../../redux/UI/actions'
+import { centerList, hideForm, removeItem } from '../../redux/UI/actions'
 
 import TextField from '@material-ui/core/TextField'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -19,8 +19,10 @@ class AppealsList extends React.Component {
   static propTypes = {
     submitAppeal: PropTypes.func.isRequired,
     centerList: PropTypes.func.isRequired,
+    removeItem: PropTypes.func.isRequired,
     hideForm: PropTypes.func.isRequired,
     selectedAppeal: PropTypes.string,
+    animationDuration: PropTypes.number.isRequired,
   }
   // State сделан без учета передачи данных об обращении. Правильно прокидывать все данные в пропсах.
   state = {
@@ -32,9 +34,13 @@ class AppealsList extends React.Component {
   }
 
   onSubmit() {
-    this.props.submitAppeal(this.props.selectedAppeal)
-    this.props.hideForm()
-    setTimeout(this.props.centerList(), 700)
+    this.props.removeItem(this.props.selectedAppeal)
+
+    setTimeout(() => {
+      this.props.hideForm()
+      this.props.centerList()
+      this.props.submitAppeal(this.props.selectedAppeal)
+    }, this.props.animationDuration)
   }
 
   render() {
@@ -42,7 +48,7 @@ class AppealsList extends React.Component {
       <form
         className={classNames(
           styles.form,
-          !this.props.formShown && styles.form_hidding
+          !this.props.selectedAppeal && styles.form_hidding
         )}
       >
         <TextField
@@ -50,6 +56,7 @@ class AppealsList extends React.Component {
           variant="filled"
           label="Номер обращения"
           value={this.props.selectedAppeal}
+          defaultValue="123456789"
         />
 
         <FormControl>
@@ -90,9 +97,13 @@ class AppealsList extends React.Component {
 
 const mapStateToProps = ({ appealsReducer, uiReducer }) => ({
   selectedAppeal: appealsReducer.selectedAppeal,
+  animationDuration: uiReducer.animationDuration,
   formShown: uiReducer.formShown,
 })
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ submitAppeal, centerList, hideForm }, dispatch)
+  bindActionCreators(
+    { submitAppeal, centerList, hideForm, removeItem },
+    dispatch
+  )
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppealsList)
