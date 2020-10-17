@@ -8,6 +8,7 @@ import connect from 'react-redux/es/connect/connect'
 
 import { fetchAppeals } from '../../redux/appeals/operations'
 import { selectAppeal } from '../../redux/appeals/actions'
+import { showForm, slideList } from '../../redux/UI/actions'
 
 import briefcase from '../../assets/icons/briefcase.svg'
 
@@ -15,12 +16,16 @@ class AppealsList extends React.Component {
   static propTypes = {
     fetchAppeals: PropTypes.func.isRequired,
     selectAppeal: PropTypes.func.isRequired,
+    showForm: PropTypes.func.isRequired,
+    slideList: PropTypes.func.isRequired,
     appeals: PropTypes.array.isRequired,
     selectedAppeal: PropTypes.string,
+    listSlided: PropTypes.bool.isRequired,
   }
   onSelect(id) {
-    if (this.props.selectedAppeal) id = null // TODO: remove after impement of submitAppeal method
     this.props.selectAppeal(id)
+    this.props.slideList()
+    setTimeout(this.props.showForm, 700) // list transition duration
   }
 
   mapAppealsToRender = () =>
@@ -59,7 +64,7 @@ class AppealsList extends React.Component {
       <aside
         className={classNames(
           styles.wrapper,
-          this.props.selectedAppeal && styles.wrapper_slide
+          this.props.listSlided && styles.wrapper_slide
         )}
         children={this.mapAppealsToRender()}
       ></aside>
@@ -67,11 +72,15 @@ class AppealsList extends React.Component {
   }
 }
 
-const mapStateToProps = ({ appealsReducer }) => ({
+const mapStateToProps = ({ appealsReducer, uiReducer }) => ({
   appeals: appealsReducer.appeals,
   selectedAppeal: appealsReducer.selectedAppeal,
+  listSlided: uiReducer.listSlided,
 })
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ fetchAppeals, selectAppeal }, dispatch)
+  bindActionCreators(
+    { fetchAppeals, selectAppeal, showForm, slideList },
+    dispatch
+  )
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppealsList)
