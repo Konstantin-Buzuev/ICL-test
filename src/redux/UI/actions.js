@@ -1,4 +1,11 @@
-import { FORM_SHOW, FORM_HIDE, LIST_CENTER, LIST_SLIDE } from '../types'
+import {
+  FORM_SHOW,
+  FORM_HIDE,
+  LIST_CENTER,
+  LIST_SLIDE,
+  REMOVE_ITEM,
+  ITEM_REMOVED,
+} from '../types'
 
 export const showForm = () => ({
   type: FORM_SHOW,
@@ -18,4 +25,14 @@ export const slideList = () => ({
 export const centerList = () => ({
   type: LIST_CENTER,
   payload: false,
+})
+
+export const removeItem = (id) => ({
+  type: REMOVE_ITEM,
+  payload: id,
+})
+
+export const itemRemoved = () => ({
+  type: ITEM_REMOVED,
+  payload: null,
 })
